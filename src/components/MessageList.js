@@ -5,10 +5,11 @@ class MessageList extends Component {
   render() {
     let messages = this.props.messages.map((message, i) => {
       return <Message 
-        index={ i } 
+        key={ i } 
         message={ message }
-        userStarred={this.props.userStarred}
-        userSelected={this.props.userSelected}
+        userStarred={ this.props.userStarred }
+        userSelected={ this.props.userSelected }
+        userRead={ this.props.userRead }
       />;
     });
 

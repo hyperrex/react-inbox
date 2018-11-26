@@ -74,7 +74,13 @@ class App extends Component {
 
   userSelected = (message) => {
     message.selected = !message.selected
-    console.log('selected >>>>', message)
+    // console.log('selected >>>>', message)
+    this.setState(this.state.messages.concat(message))
+  }
+
+  userRead = (message) => {
+    message.read = true
+    // console.log('read >>>>', message)
     this.setState(this.state.messages.concat(message))
   }
 
@@ -86,6 +92,7 @@ class App extends Component {
         messages={ this.state.messages }
         userStarred={ this.userStarred }
         userSelected={ this.userSelected }
+        userRead={ this.userRead }
         />
       </div>
     );
