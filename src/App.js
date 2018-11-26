@@ -84,10 +84,28 @@ class App extends Component {
     this.setState(this.state.messages.concat(message))
   }
 
+  selectBoxState = () => {
+    let amountSelected = this.state.messages.filter(message => {
+      return message.selected
+    }).length
+
+    let action = ''
+    if (amountSelected === this.state.messages.length) {
+      action = '-check'
+    } else if (amountSelected === 0) {
+      action = ''
+    } else {
+      action = '-minus'
+    }
+    return action
+  }
+
   render() {
     return (
       <div className="App">
-        <ToolBar />
+        <ToolBar 
+          selectBoxState={ this.selectBoxState }
+        />
         <MessageList 
         messages={ this.state.messages }
         userStarred={ this.userStarred }
