@@ -2,26 +2,36 @@ import React, { Component } from 'react';
 
 class ToolBar extends Component {
   render() {
+    let unRead = this.props.messages.filter(message => !message.read).length
+
     return (
       <div className="row toolbar">
         <div className="col-md-12">
           <p className="pull-right">
-            <span className="badge badge">2</span>
+            <span className="badge badge">{ unRead }</span>
             unread messages
           </p>
 
           <button className="btn btn-default">
             <i
-            onClick={ () => this.props.toggleSelectAll() }
-            className={`fa fa${this.props.selectBoxState()}-square-o`
-            }></i>
+              onClick={() => this.props.toggleSelectAll()}
+              className={`fa fa${this.props.selectBoxState()}-square-o`}
+            />
           </button>
 
-          <button className="btn btn-default" disabled="disabled">
+          <button
+            onClick={() => this.props.markAsRead()}
+            className="btn btn-default"
+            disabled={`${this.props.disabledReadButton()}`}
+          >
             Mark As Read
           </button>
 
-          <button className="btn btn-default" disabled="disabled">
+          <button
+            onClick={() => this.props.markAsUnRead()}
+            className="btn btn-default"
+            disabled={`${this.props.disabledUnReadButton()}`}
+          >
             Mark As Unread
           </button>
 
