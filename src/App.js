@@ -159,21 +159,78 @@ class App extends Component {
     let selectedMessages = this.state.messages.filter(
       message => message.selected
     );
-     let readArr = selectedMessages.map( message => {
-       return message.read ? true : false
-     })
-     return readArr.includes(true) || readArr.length === 0 ? 'disabled' : ''
-  }
+    let readArr = selectedMessages.map(message => {
+      return message.read ? true : false;
+    });
+    return readArr.includes(true) || readArr.length === 0 ? 'disabled' : '';
+  };
 
   disabledUnReadButton = () => {
     let selectedMessages = this.state.messages.filter(
       message => message.selected
     );
-    let readArr = selectedMessages.map( message => {
-      return message.read ? true : false
-    })
-    return readArr.includes(false) || readArr.length === 0 ? 'disabled' : ''
+    let readArr = selectedMessages.map(message => {
+      return message.read ? true : false;
+    });
+    return readArr.includes(false) || readArr.length === 0 ? 'disabled' : '';
+  };
+
+  deleteMessage() {
+    const messages = this.state.messages.filter(message => !message.selected)
+    this.setState({ messages })
   }
+
+  disabledDeleteButton = () => {
+    let selectedMessages = this.state.messages.filter(
+      message => message.selected
+    );
+    return selectedMessages.length === 0 ? 'disabled' : '';
+  };
+
+  disabledApplyLabelMenu = () => {
+    let selectedMessages = this.state.messages.filter(
+      message => message.selected
+    );
+    return selectedMessages.length === 0 ? 'disabled' : '';
+  };
+
+  disabledRemoveLabelMenu = () => {
+    let selectedMessages = this.state.messages.filter(
+      message => message.selected
+    );
+    return selectedMessages.length === 0 ? 'disabled' : '';
+  };
+
+  applyLabel = label => {
+    if (label === 'Apply label') return;
+    let selectedMessages = this.state.messages.filter(
+      message => message.selected
+    );
+    this.setState(
+      this.state.messages.concat(
+        selectedMessages.map(message => {
+          if (message.labels.includes(label)) return message;
+          message.labels.push(label);
+          return message;
+        })
+      )
+    );
+  };
+
+  removeLabel = label => {
+    if (label === 'Remove label') return;
+    let selectedMessages = this.state.messages.filter(
+      message => message.selected
+    );
+    this.setState(
+      this.state.messages.concat(
+        selectedMessages.map(message => {
+          message.labels.splice(label, 1);
+          return message;
+        })
+      )
+    );
+  };
 
   render() {
     return (
@@ -186,6 +243,11 @@ class App extends Component {
           markAsUnRead={this.markAsUnRead}
           disabledReadButton={this.disabledReadButton}
           disabledUnReadButton={this.disabledUnReadButton}
+          disabledDeleteButton={this.disabledDeleteButton}
+          disabledApplyLabelMenu={this.disabledApplyLabelMenu}
+          disabledRemoveLabelMenu={this.disabledRemoveLabelMenu}
+          applyLabel={this.applyLabel}
+          removeLabel={this.removeLabel}
         />
         <MessageList
           messages={this.state.messages}
