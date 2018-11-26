@@ -68,7 +68,13 @@ class App extends Component {
   
   userStarred = (message) => {
     message.starred = !message.starred
-    console.log('here', message)
+    // console.log('starred >>>>', message)
+    this.setState(this.state.messages.concat(message))
+  }
+
+  userSelected = (message) => {
+    message.selected = !message.selected
+    console.log('selected >>>>', message)
     this.setState(this.state.messages.concat(message))
   }
 
@@ -79,6 +85,7 @@ class App extends Component {
         <MessageList 
         messages={ this.state.messages }
         userStarred={ this.userStarred }
+        userSelected={ this.userSelected }
         />
       </div>
     );

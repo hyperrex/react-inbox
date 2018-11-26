@@ -8,6 +8,7 @@ class MessageList extends Component {
         index={ i } 
         message={ message }
         userStarred={this.props.userStarred}
+        userSelected={this.props.userSelected}
       />;
     });
 
