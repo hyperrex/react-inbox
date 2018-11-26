@@ -11,7 +11,10 @@ class ToolBar extends Component {
           </p>
 
           <button className="btn btn-default">
-            <i className={`fa fa${this.props.selectBoxState()}-square-o`}></i>
+            <i
+            onClick={ () => this.props.toggleSelectAll() }
+            className={`fa fa${this.props.selectBoxState()}-square-o`
+            }></i>
           </button>
 
           <button className="btn btn-default" disabled="disabled">

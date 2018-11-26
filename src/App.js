@@ -100,11 +100,34 @@ class App extends Component {
     return action
   }
 
+  toggleSelectAll = () => {
+    let amountSelected = this.state.messages.filter(message => {
+      return message.selected
+    }).length
+
+    if ( amountSelected === this.state.messages.length ) {
+      this.setState({
+        message: this.state.messages.map(message => {
+          message.selected = false
+          return message
+        })
+      })
+    } else {
+      this.setState({
+        message: this.state.messages.map( message => {
+          message.selected = true
+          return message
+        })
+      })
+    }
+  }
+
   render() {
     return (
       <div className="App">
         <ToolBar 
           selectBoxState={ this.selectBoxState }
+          toggleSelectAll={ this.toggleSelectAll }
         />
         <MessageList 
         messages={ this.state.messages }
