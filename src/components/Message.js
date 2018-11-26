@@ -1,10 +1,13 @@
 import React from 'react';
 
-export default function Message({ message }) {
-  //new default. {message} used to be props
-  // convert props.message.read to message.read
+const Message = ({ message }) => {
+  let labels = message.labels.map ((label, i) => {
+    return (
+      <span className="label label-warning">{ label }</span>
+    )
+  })
   return (
-    <div className={`row message ${message.read ? 'read' : 'unread'}`}>
+    <div className={`row message ${message.read ? 'read' : 'unread'} ${message.selected ? 'selected' : ''}`}>
       <div className="col-xs-1">
         <div className="row">
           <div className="col-xs-2">
@@ -16,10 +19,11 @@ export default function Message({ message }) {
         </div>
       </div>
       <div className="col-xs-11">
-        <span className="label label-warning">dev</span>
-        <span className="label label-warning">gschool</span>
+        { labels }
         <a href="#">whee</a>
       </div>
     </div>
   );
 }
+
+export default Message;
