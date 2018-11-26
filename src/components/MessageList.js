@@ -4,12 +4,16 @@ import Message from './Message';
 class MessageList extends Component {
   render() {
     let messages = this.props.messages.map((message, i) => {
-      return <Message key={i} message={message} />;
+      return <Message 
+        index={ i } 
+        message={ message }
+        userStarred={this.props.userStarred}
+      />;
     });
 
     return (
       <div>
-        {messages}
+        { messages }
       </div>
     );
   }

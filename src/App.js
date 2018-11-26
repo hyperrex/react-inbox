@@ -65,12 +65,21 @@ class App extends Component {
       }
     ]
   }
+  
+  userStarred = (message) => {
+    message.starred = !message.starred
+    console.log('here', message)
+    this.setState(this.state.messages.concat(message))
+  }
 
   render() {
     return (
       <div className="App">
         <ToolBar />
-        <MessageList messages={this.state.messages} />
+        <MessageList 
+        messages={ this.state.messages }
+        userStarred={ this.userStarred }
+        />
       </div>
     );
   }
