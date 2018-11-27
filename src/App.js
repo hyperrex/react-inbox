@@ -2,79 +2,35 @@ import React, { Component } from 'react';
 import './App.css';
 import ToolBar from './components/Toolbar';
 import MessageList from './components/MessageList';
+import url from './env';
+
 class App extends Component {
   state = {
-    messages: [
-      {
-        id: 1,
-        subject:
-          "You can't input the protocol without calculating the mobile RSS protocol!",
-        read: false,
-        starred: true,
-        labels: ['dev', 'personal']
-      },
-      {
-        id: 2,
-        subject:
-          "connecting the system won't do anything, we need to input the mobile AI panel!",
-        read: false,
-        starred: false,
-        selected: true,
-        labels: []
-      },
-      {
-        id: 3,
-        subject:
-          'Use the 1080p HTTP feed, then you can parse the cross-platform hard drive!',
-        read: false,
-        starred: true,
-        labels: ['dev']
-      },
-      {
-        id: 4,
-        subject: 'We need to program the primary TCP hard drive!',
-        read: true,
-        starred: false,
-        selected: true,
-        labels: []
-      },
-      {
-        id: 5,
-        subject:
-          'If we override the interface, we can get to the HTTP feed through the virtual EXE interface!',
-        read: false,
-        starred: false,
-        labels: ['personal']
-      },
-      {
-        id: 6,
-        subject: 'We need to back up the wireless GB driver!',
-        read: true,
-        starred: true,
-        labels: []
-      },
-      {
-        id: 7,
-        subject: 'We need to index the mobile PCI bus!',
-        read: true,
-        starred: false,
-        labels: ['dev', 'personal']
-      },
-      {
-        id: 8,
-        subject:
-          'If we connect the sensor, we can get to the HDD port through the redundant IB firewall!',
-        read: true,
-        starred: true,
-        labels: []
-      }
-    ]
+    messages: []
   };
 
-  userStarred = message => {
+  async componentDidMount() {
+    console.log(url)
+    const response = await fetch(url)
+    const json = await response.json()
+    this.setState({ messages: json})
+  }
+
+  userStarred = async message => {
+    const payload = {
+      messageIds: [message.id],
+      command: 'star'
+    }
     message.starred = !message.starred;
-    // console.log('starred >>>>', message)
     this.setState(this.state.messages.concat(message));
+    await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
   };
 
   userSelected = message => {
@@ -83,10 +39,22 @@ class App extends Component {
     this.setState(this.state.messages.concat(message));
   };
 
-  userRead = message => {
+  userRead = async message => {
+    const payload = {
+      messageIds: [message.id],
+      command: 'read',
+      read: true
+    }
     message.read = true;
-    // console.log('read >>>>', message)
     this.setState(this.state.messages.concat(message));
+    await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
   };
 
   selectBoxState = () => {
@@ -175,9 +143,24 @@ class App extends Component {
     return readArr.includes(false) || readArr.length === 0 ? 'disabled' : '';
   };
 
-  deleteMessage() {
+  deleteMessage = async () => {
     const messages = this.state.messages.filter(message => !message.selected)
+    const selectedMessages = this.state.messages.filter(message => message.selected)
     this.setState({ messages })
+    const messageIds = selectedMessages.map((message) => message.id)
+    console.log(messageIds)
+    const payload = {
+      messageIds,
+      command: 'delete',
+    }
+    await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
   }
 
   disabledDeleteButton = () => {
@@ -201,7 +184,7 @@ class App extends Component {
     return selectedMessages.length === 0 ? 'disabled' : '';
   };
 
-  applyLabel = label => {
+  applyLabel = async label => {
     if (label === 'Apply label') return;
     let selectedMessages = this.state.messages.filter(
       message => message.selected
@@ -215,6 +198,21 @@ class App extends Component {
         })
       )
     );
+    const messageIds = selectedMessages.map((message) => message.id)
+    const payload = {
+      messageIds,
+      command: 'addLabel',
+      label
+    }
+    await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+
   };
 
   removeLabel = label => {
@@ -246,6 +244,7 @@ class App extends Component {
           disabledDeleteButton={this.disabledDeleteButton}
           disabledApplyLabelMenu={this.disabledApplyLabelMenu}
           disabledRemoveLabelMenu={this.disabledRemoveLabelMenu}
+          deleteMessage={this.deleteMessage}
           applyLabel={this.applyLabel}
           removeLabel={this.removeLabel}
         />

@@ -74,6 +74,7 @@ class ToolBar extends Component {
           <button
             className="btn btn-default"
             disabled={`${this.props.disabledDeleteButton()}`}
+            onClick={ this.props.deleteMessage }
           >
             <i className="fa fa-trash-o" />
           </button>
